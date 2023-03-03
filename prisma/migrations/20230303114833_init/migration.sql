@@ -1,0 +1,84 @@
+-- CreateTable
+CREATE TABLE `Game` (
+    `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+    `title` VARCHAR(200) NOT NULL,
+    `url` VARCHAR(255) NOT NULL,
+    `git` VARCHAR(255) NOT NULL,
+    `year` INTEGER NOT NULL,
+    `description` TEXT NULL,
+    `cover` VARCHAR(255) NULL,
+    `createdAt` TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
+    `updatedAt` TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
+
+    UNIQUE INDEX `id`(`id`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `GameUsers` (
+    `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+    `gameId` INTEGER UNSIGNED NOT NULL,
+    `userId` INTEGER UNSIGNED NOT NULL,
+
+    UNIQUE INDEX `id`(`id`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `User` (
+    `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(200) NOT NULL,
+    `git` VARCHAR(255) NULL,
+
+    UNIQUE INDEX `id`(`id`),
+    UNIQUE INDEX `User_name_key`(`name`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `GameTypes` (
+    `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+    `gameId` INTEGER UNSIGNED NOT NULL,
+    `typeId` INTEGER UNSIGNED NOT NULL,
+
+    UNIQUE INDEX `id`(`id`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Type` (
+    `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+    `type` VARCHAR(200) NOT NULL,
+
+    UNIQUE INDEX `id`(`id`),
+    UNIQUE INDEX `Type_type_key`(`type`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Score` (
+    `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+    `score` INTEGER NOT NULL DEFAULT 0,
+    `handle` VARCHAR(20) NULL,
+    `gameId` INTEGER UNSIGNED NOT NULL,
+    `createdAt` TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
+    `updatedAt` TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
+
+    UNIQUE INDEX `id`(`id`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `GameUsers` ADD CONSTRAINT `GameUsers_gameId_fkey` FOREIGN KEY (`gameId`) REFERENCES `Game`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `GameUsers` ADD CONSTRAINT `GameUsers_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `GameTypes` ADD CONSTRAINT `GameTypes_gameId_fkey` FOREIGN KEY (`gameId`) REFERENCES `Game`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `GameTypes` ADD CONSTRAINT `GameTypes_typeId_fkey` FOREIGN KEY (`typeId`) REFERENCES `Type`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Score` ADD CONSTRAINT `Score_gameId_fkey` FOREIGN KEY (`gameId`) REFERENCES `Game`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
